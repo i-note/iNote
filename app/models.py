@@ -156,7 +156,9 @@ class NoteCategory(db.Model):
     name = db.Column(db.String(64),index=True)
     children_id = db.Column(db.Integer, db.ForeignKey('note_categories.id'),index=True)
     shared_status = db.Column(db.Integer)
-    parent = db.relationship('NoteCategory',backref='children',lazy='dynamic')
+    children = db.relationship('NoteCategory',backref='parent',remote_side='NoteCategory.id',lazy='dynamic',uselist=True)
+
+    notes = db.relationship('Note',backref='category',lazy='dynamic')
 
 class Note(db.Model):
     __tablename__ = 'notes'

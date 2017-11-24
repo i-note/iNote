@@ -1,0 +1,18 @@
+{% extends "bootstrap/base.html" %}
+
+{% block content %}
+
+    {% block inote %}
+    {% endblock %}
+
+{% endblock %}
+
+{%- block styles %}
+<!-- Bootstrap -->
+<link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='local')}}" rel="stylesheet">
+{%- endblock styles %}
+
+{% block scripts %}
+    <script src="{{bootstrap_find_resource('jquery.js', cdn='local')}}"></script>
+    <script src="{{bootstrap_find_resource('js/bootstrap.js', cdn='local')}}"></script>
+{%- endblock scripts %}

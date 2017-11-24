@@ -40,6 +40,11 @@ class LisukeDevConfig(BaseConfig):
     MAIL_SERVER = 'smtp.qq.com'
     MAIL_PORT = 25
     MAIL_USE_TLS = True
+    MAIL_USERNAME = '1573630389@qq.com'
+    MAIL_PASSWORD = 'dreqneeqrytzgggi'
+    INOTE_MAIL_SUBJECT_PREFIX = '[iNote]'
+    INOTE_MAIL_SENDER = 'iNote Admin <1573630389@qq.com>'
+    INOTE_ADMIN = '1573630389@qq.com'
 
 config = {
     'development': DevelopmentConfig,

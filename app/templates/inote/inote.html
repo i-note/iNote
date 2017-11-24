@@ -1,0 +1,53 @@
+{%- extends "inote/inote_base.html" %}
+
+{% block styles -%}
+    {{super()}}
+    <link rel="stylesheet" type="text/css"
+          href="{{url_for('static', filename='style/base.css')}}">
+    <link rel="stylesheet" href="/static/style/jquery.resizableColumns.css">
+
+{% endblock %}
+
+{% block inote %}
+
+    <table class=" table-bordered" style="width:100%">
+      <thead>
+        <tr height="50px">
+          <th width="20%">category</th>
+          <th width="20%">item</th>
+          <th>inote</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+              <div id="category"></div>
+          </td>
+          <td> </td>
+          <td> </td>
+        </tr>
+      </tbody>
+    </table>
+
+{% block scripts %}
+
+    {{super()}}
+
+    <script src="/static/js/colResizable-1.6.min.js"></script>
+
+    <script>
+
+        $(function(){
+          $("table").colResizable();
+        });
+
+        $("#category").height($(window).height()-$("#category").position().top-1);
+        $(window).resize(function () {
+            $("#category").height($(window).height()-$("#category").position().top-1);
+        });
+    </script>
+
+{%- endblock scripts %}
+
+
+{% endblock %}
