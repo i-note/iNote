@@ -6,7 +6,6 @@ from flask_login import UserMixin, current_user,AnonymousUserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from datetime import datetime
 
-
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -136,14 +135,13 @@ class User(UserMixin,db.Model):
 
     # 外键关联
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
-    notes = db.relationship('Note', backref='users', lazy='dynamic')
-    friendlinks = db.relationship('Friendlink', backref='users', lazy='dynamic')
-
+    notes = db.relationship('Note', backref='user', lazy='dynamic')
+    friend_links = db.relationship('Friendlink', backref='user', lazy='dynamic')
+    note_categories = db.relationship('NoteCategory',backref='user',uselist=True,lazy='dynamic')
     tags = db.relationship('Tag',
                            secondary=user_use_tags_relation,
                            backref=db.backref('users',lazy='dynamic'),
                            lazy='dynamic')
-
 
 class Tag(db.Model):
     __tablename__ = 'tags'
@@ -154,11 +152,11 @@ class NoteCategory(db.Model):
     __tablename__ = 'note_categories'
     id = db.Column(db.Integer,primary_key=True,index=True)
     name = db.Column(db.String(64),index=True)
-    children_id = db.Column(db.Integer, db.ForeignKey('note_categories.id'),index=True)
+    parent_id = db.Column(db.Integer, db.ForeignKey('note_categories.id'),index=True) # many
     shared_status = db.Column(db.Integer)
-    children = db.relationship('NoteCategory',backref='parent',remote_side='NoteCategory.id',lazy='dynamic',uselist=True)
-
+    children = db.relationship('NoteCategory',backref=db.backref('parent', remote_side=[id]),lazy='dynamic',uselist=True) # one
     notes = db.relationship('Note',backref='category',lazy='dynamic')
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 class Note(db.Model):
     __tablename__ = 'notes'
@@ -178,7 +176,7 @@ class Article(db.Model):
     source = db.Column(db.Text(),index=True)
 
 class Friendlink(db.Model):
-    __tablename__ = 'friendlinks'
+    __tablename__ = 'friend_links'
     id = db.Column(db.Integer,primary_key=True)
     title = db.Column(db.String(32))
     url = db.Column(db.String(128))

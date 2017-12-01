@@ -10,9 +10,15 @@
 {%- block styles %}
 <!-- Bootstrap -->
 <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='local')}}" rel="stylesheet">
+
 {%- endblock styles %}
 
 {% block scripts %}
     <script src="{{bootstrap_find_resource('jquery.js', cdn='local')}}"></script>
     <script src="{{bootstrap_find_resource('js/bootstrap.js', cdn='local')}}"></script>
+
+    <!-- left -->
+
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
 {%- endblock scripts %}

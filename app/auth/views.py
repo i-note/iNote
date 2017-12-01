@@ -6,6 +6,7 @@ from app.models import User,Role
 from flask_babel import gettext as _
 from app import db
 from app.utils.email import send_email
+from app.inote.utils.iNoteCategoryUtils import iNoteCategoryUtil
 
 @auth.route('/',methods=['get','post'])
 @auth.route('/login',methods=['get','post'])
@@ -43,7 +44,7 @@ def register():
         send_email(user.email, _('Confirm Your Account'),
                    'auth/email/confirm', user=user, token=token)
         flash(_('Registration Successful.'))
-        flash('A confirmation email has been sent to you by email.')
+        flash(_('A confirmation email has been sent to you by email.'))
         return redirect(url_for('auth.login'))
     return render_template('auth/register.html', form=form)
 
@@ -54,6 +55,7 @@ def confirm(token):
     if current_user.confirmed:
         return redirect(url_for('main.index'))
     if current_user.confirm(token):
+        iNoteCategoryUtil.init()
         flash(_('You have confirmed your account. Thanks!'))
     else:
         flash(_('The confirmation link is invalid or has expired.'))
