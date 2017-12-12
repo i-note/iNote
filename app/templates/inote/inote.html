@@ -63,7 +63,7 @@
         <thead>
             <tr height="50px">
                 <th width="20%">category</th>
-                <th width="20%">item</th>
+                <th width="25%">item</th>
                 <th>inote</th>
             </tr>
         </thead>
@@ -75,13 +75,44 @@
                     </div>
                 </td>
                 <td valign="top">
-                    <div id="item" class="autoScroll">
-                        <div id="list"></div>
+                    <div id="items" class="autoScroll">
+                        <div id="list">
+                            <!---->
+                            <div id="test" class="item">
+                                <span class="item-title">标题aaaaaaaaaaaaaaaaaaa</span>
+                                <div class="item-body" >
+                                    <span class="item-content-view">
+                                        内容sdfasdfsdfdsafdfsdafdsfadsfdasfdasfdasfdasfdasfasfadsfasdf
+                                    </span>
+                                </div>
+                                <span class="item-body-right" >
+                                    <img class="item-image-view" src="https://leanote.com/api/file/getImage?fileId=59d5102bab644101ff0021ab" alt="test">
+                                </span>
+                            </div>
+                            <div id="test" class="item item-active">
+                                <span class="item-title">标题aaaaaaaaaaaaaaaaaaa</span>
+                                <div class="item-body" >
+                                    <span class="item-content-view">
+                                        hello world
+                                        hello  world
+                                        你好
+                                        你 好
+                                        你  好
+                                    </span>
+                                </div>
+                                <span class="item-body-right" >
+                                    <img class="item-image-view" src="https://leanote.com/api/file/getImage?fileId=59d5102bab644101ff0021ab" alt="test">
+                                </span>
+                            </div>
+                            <!---->
+                        </div>
                     </div>
                 </td>
                 <td valign="top">
                     <div id="content" class="autoScroll">
-                        <div id="editor"></div>
+                        <textarea  id="ckeditor">
+                            test
+                        </textarea>
                     </div>
                 </td>
             </tr>
@@ -98,20 +129,19 @@
 	<script src="http://wwwendt.de/tech/fancytree//src/jquery.fancytree.edit.js"></script>
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.2.3/jquery.contextMenu.min.js"></script>
 	<script src="http://wwwendt.de/tech/fancytree/3rd-party/extensions/contextmenu/js/jquery.fancytree.contextMenu.js"></script>
+    <script src="https://cdn.ckeditor.com/4.4.6/standard/ckeditor.js"></script>
 
     <script>
 
-        $(function(){
-            $("table").colResizable();
-        });
+        CKEDITOR.replace('ckeditor');
 
         $("#category").height($(window).height()-$("#category").position().top-1);
-        $("#item").height($(window).height()-$("#item").position().top-1);
+        $("#items").height($(window).height()-$("#items").position().top-1);
         $("#content").height($(window).height()-$("#content").position().top-1);
 
         $(window).resize(function () {
             $("#category").height($(window).height()-$("#category").position().top-1);
-            $("#item").height($(window).height()-$("#item").position().top-1);
+            $("#items").height($(window).height()-$("#items").position().top-1);
             $("#content").height($(window).height()-$("#content").position().top-1);
         });
 
