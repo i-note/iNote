@@ -1,0 +1,16 @@
+{%- extends "base.html" %}
+{% block title %}{{_('iNote')}} - {{_('Login')}}{% endblock %}
+{% block content %}
+
+    <div class="container">
+        <center>{{_('Login')}}</center>
+        {{ wtf.quick_form(form, button_map={'submit_button': 'primary'}) }}
+        <p>
+            {{_('New user?')}}
+            <a href="{{ url_for('auth.register') }}">
+                {{_('Click here to register')}}
+            </a>
+        </p>
+    </div>
+
+{% endblock %}
