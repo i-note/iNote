@@ -1,4 +1,80 @@
-body,table,tbody,tr,th,td,div{
-            margin:0px;
-            padding:0px;
-        }
+body,table,tbody,tr,th,td,div
+{
+    margin:0px;
+    padding:0px;
+}
+
+.autoScroll
+{
+    width:100%;
+    height:100%;
+    overflow:auto;
+}
+
+#tree
+{
+    width:100%;
+    height:100%;
+}
+
+#list .item {
+    position: relative;
+    margin:2px;
+    padding:2px;
+    border:1px solid #fedcba;
+    border-radius: 3px;
+    height:110px;
+    width:98%;
+    overflow: hidden;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+#list .item:hover{
+    background:#bdbdbd;
+}
+
+.item-title{
+    display:inline;
+    text-overflow:ellipsis;
+    height:10px;
+    border-bottom: dashed 1px #ebeff2;
+}
+
+.item-active, .item-active:hover {
+    background-color: #db6577 !important;
+    color: #fff;
+}
+
+.item-body{
+    display:block;
+}
+.item-body-right{
+    width: 100px;
+    overflow: hidden;
+    position: absolute;
+    z-index: 1;
+    right: 0px;
+    top: 4px;
+    height: 100px;
+    background-color: #fff;
+    margin-right: 5px;
+    line-height: 100px;
+    text-align: center;
+}
+
+.item-body-right img{
+    max-width: 100px;
+}
+.item-content-view{
+    display:block;
+    text-overflow:ellipsis;
+    width:100%;
+    word-wrap: break-word;
+    position: absolute;
+    left: 0;
+    top: 24px;
+    right: 100px;
+    margin-left: 4px;
+}
+
