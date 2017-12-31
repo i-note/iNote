@@ -2,23 +2,21 @@
 
 {% block content %}
 
-    {% block inote %}
+    {% block inote_nav %}
+    {% endblock %}
+
+    {% block inote_content %}
+    {% endblock %}
+
+    {% block inote_foot %}
     {% endblock %}
 
 {% endblock %}
 
 {%- block styles %}
 <!-- Bootstrap -->
-<link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='local')}}" rel="stylesheet">
+<!--<link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='local')}}" rel="stylesheet">-->
+<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
 
 {%- endblock styles %}
 
-{% block scripts %}
-    <script src="{{bootstrap_find_resource('jquery.js', cdn='local')}}"></script>
-    <script src="{{bootstrap_find_resource('js/bootstrap.js', cdn='local')}}"></script>
-
-    <!-- left -->
-
-    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-
-{%- endblock scripts %}
