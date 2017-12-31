@@ -17,20 +17,20 @@ body,table,tbody,tr,th,td,div
     height:100%;
 }
 
-#list .item {
+.note-list .note-items {
     position: relative;
     margin:2px;
     padding:2px;
     border:1px solid #fedcba;
     border-radius: 3px;
     height:110px;
-    width:98%;
+    width:99%;
     overflow: hidden;
     cursor: pointer;
     margin-top: 5px;
 }
 
-#list .item:hover{
+.note-list .item:hover{
     background:#bdbdbd;
 }
 

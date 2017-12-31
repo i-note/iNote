@@ -2,14 +2,14 @@
 import os
 from flask_script import Manager, Shell
 from app import create_app, db
-from app.models import User,Role,NoteCategory
+from app.models import User,Role,NoteCategory,Note,Tag
 
 app = create_app(os.getenv('INOTE_CONFIG') or 'lisuke-dev')
 
 manager = Manager(app)
 
 def make_shell_context():
-    return dict(app=app, db=db,User=User,Role=Role,NoteCategory=NoteCategory)
+    return dict(app=app, db=db,User=User,Role=Role,NoteCategory=NoteCategory,Note=Note,Tag=Tag)
 manager.add_command("shell", Shell(make_context=make_shell_context))
 
 

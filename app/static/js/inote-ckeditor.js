@@ -1,6 +1,7 @@
 
     function ReLoadCkeditor()
     {
+
         var ck_editor = CKEDITOR.replace('ckeditor');
         ck_editor.on('instanceReady',function(event)                  //准备
         {
@@ -15,19 +16,43 @@
                    event.removeListener('instanceReady',this.callee);
                    if(editor.name=='ckeditor')
                    {
-                        var height = $(window).height()- $("#cke_1_top").position().top - $("#cke_1_top").outerHeight(true) - $("#cke_1_bottom").outerHeight(true) - 2 ;
-                        $('#cke_1_contents').height(height);
+                        var che_find = $("#cke_ckeditor")[0].classList[0];
+                        var height = $(window).height()- $("#"+che_find+"_top").position().top - $("#"+che_find+"_top").outerHeight(true) - $("#"+che_find+"_bottom").outerHeight(true) - 2 ;
+                        $('#'+che_find+'_contents').height(height);
                    }
                 },0);
         },null,null,9999);
         $(window).resize(function () {
-            var height = $(window).height()- $("#cke_1_top").position().top - $("#cke_1_top").outerHeight(true) - $("#cke_1_bottom").outerHeight(true) - 2;
-            $('#cke_1_contents').height(height);
+            var che_find = $("#cke_ckeditor")[0].classList[0];
+            var height = $(window).height()- $("#"+che_find+"_top").position().top - $("#"+che_find+"_top").outerHeight(true) - $("#"+che_find+"_bottom").outerHeight(true) - 2;
+            $('#'+che_find+'_contents').height(height);
         });
     }
     $('#ckeditor').ready(ReLoadCkeditor);
-    <!--ReLoadCkeditor()-->
-        <!--//赋值-->
-        <!--ckeditor.setData("content");-->
-        <!--//获取源码-->
-        <!--ckeditor.getData();-->
+
+    var Inote_CKEditor = function(name){
+        if(!name)
+            this.editor_name =  "ckeditor";
+        else
+            this.editor_name = name;
+        console.log(this.editor_name)
+
+        this.construct=function(){
+
+            ReLoadCkeditor();
+        }
+        this.destruct=function(){
+            console.log("test");
+        }
+        this.getData=function(){
+            console.log("test");
+        }
+        this.setData=function(data){
+
+        }
+
+    };
+
+
+    Inote_CKEditor.prototype = new EditorTypeInterface;
+    note.addInstance(new Inote_CKEditor);

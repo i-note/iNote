@@ -256,7 +256,10 @@
                 }
 			},
 			activate: function(event, data) {
-				//console.log(data.node)
+				var list = new INote_list("#items",data.node.key);
+				console.log(list.id);
+
+				list.init();
 			},
 			tooltip: function(event, data) {
 				return data.node.title;

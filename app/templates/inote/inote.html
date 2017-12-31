@@ -127,7 +127,23 @@
             <tr height="50px">
                 <th width="20%">category</th>
                 <th width="25%">item</th>
-                <th>inote</th>
+                <th>
+
+                    <div class="dropdown">
+                        <button type="button" class="btn dropdown-toggle" id="dropdownMenu1"
+                                data-toggle="dropdown">
+                            {{_('create new Note')}}
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="#">ckeditor</a>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -139,57 +155,13 @@
                 </td>
                 <td valign="top">
                     <div id="items" class="autoScroll">
-                        <div id="list">
-                            <!---->
-                            <div id="test" class="item">
-                                <span class="item-title">标题aaaaaaaaaaaaaaaaaaa</span>
-                                <div class="item-body" >
-                                    <span class="item-content-view">
-                                        内容sdfasdfsdfdsafdfsdafdsfadsfdasfdasfdasfdasfdasfasfadsfasdf
-                                    </span>
-                                </div>
-                                <span class="item-body-right" >
-                                    <img class="item-image-view" src="https://leanote.com/api/file/getImage?fileId=59d5102bab644101ff0021ab" alt="test">
-                                </span>
-                            </div>
-                            <div id="test" class="item item-active">
-                                <span class="item-title">标题aaaaaaaaaaaaaaaaaaa</span>
-                                <div class="item-body" >
-                                    <span class="item-content-view">
-                                        hello world
-                                        hello  world
-                                        你好
-                                        你 好
-                                        你  好
-                                    </span>
-                                </div>
-                                <span class="item-body-right" >
-                                    <img class="item-image-view" src="https://leanote.com/api/file/getImage?fileId=59d5102bab644101ff0021ab" alt="test">
-                                </span>
-                            </div>
-                            <!---->
-                        </div>
+
                     </div>
                 </td>
                 <td valign="top">
                     <div id="content" class="autoScroll">
                         <!---->
-                        <div id="note">
-                            <div id="note-title">
-                                <input name="noteTitle" id="noteTitle" value placeholder="无标题" tabindex="1" style="width:100%;">
-                            </div>
-                            <div id="note-tag">
-                                <input name="noteTag">
-                            </div>
-                            <div id="note-editor">
-                                <textarea id="ckeditor" tabindex="2">
-                                    test
-                                </textarea>
-                            </div>
-                            <div id="note-status-bar">
 
-                            </div>
-                        </div>
                         <!---->
                     </div>
                 </td>
@@ -209,8 +181,8 @@
     <!--<script src="{{bootstrap_find_resource('js/bootstrap.js', cdn='local')}}"></script>-->
 	<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-<!--left-->
+    <script src={{url_for("static",filename="js/jquery-ui.min.js")}}></script>
+
     <script src="/static/js/colResizable-1.6.min.js"></script>
 	<script src="http://wwwendt.de/tech/fancytree//src/jquery.fancytree.js"></script>
 	<script src="http://wwwendt.de/tech/fancytree//src/jquery.fancytree.dnd5.js"></script>
@@ -218,9 +190,10 @@
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.2.3/jquery.contextMenu.min.js"></script>
 	<script src="http://wwwendt.de/tech/fancytree/3rd-party/extensions/contextmenu/js/jquery.fancytree.contextMenu.js"></script>
 
+
+    <script src={{url_for("static",filename="js/inote-list.js")}}></script>
     <script src={{url_for("static",filename="js/inote-tree.js")}}></script>
 
-<!--right-->
     <script src="https://cdn.ckeditor.com/4.4.6/standard/ckeditor.js"></script>
 
     <script src={{url_for("static",filename="js/inote.js")}}></script>
@@ -236,6 +209,8 @@
             $("#items").height($(window).height()-$("#items").position().top-1);
             $("#content").height($(window).height()-$("#content").position().top-1);
         });
-    </script>
 
+        //inote-list
+
+    </script>
 {%- endblock scripts %}
