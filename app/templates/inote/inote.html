@@ -128,21 +128,20 @@
                 <th width="20%">category</th>
                 <th width="25%">item</th>
                 <th>
-
-                    <div class="dropdown">
+                    <div  class="dropdown">
                         <button type="button" class="btn dropdown-toggle" id="dropdownMenu1"
                                 data-toggle="dropdown">
                             {{_('create new Note')}}
                             <span class="caret"></span>
                         </button>
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                        <ul id="inote-new-create" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            <!--
                             <li role="presentation">
-                                <a role="menuitem" tabindex="-1" href="#">ckeditor</a>
+                                <a id="c_n_ckeditor" role="menuitem" tabindex="-1" href="#">ckeditor</a>
                             </li>
-
+                            -->
                         </ul>
                     </div>
-
                 </th>
             </tr>
         </thead>
@@ -191,12 +190,13 @@
 	<script src="http://wwwendt.de/tech/fancytree/3rd-party/extensions/contextmenu/js/jquery.fancytree.contextMenu.js"></script>
 
 
+    <script src={{url_for("static",filename="js/inote.js")}}></script>
+
+
     <script src={{url_for("static",filename="js/inote-list.js")}}></script>
     <script src={{url_for("static",filename="js/inote-tree.js")}}></script>
 
     <script src="https://cdn.ckeditor.com/4.4.6/standard/ckeditor.js"></script>
-
-    <script src={{url_for("static",filename="js/inote.js")}}></script>
     <script src={{url_for("static",filename="js/inote-ckeditor.js")}}></script>
 
     <script>
@@ -210,7 +210,37 @@
             $("#content").height($(window).height()-$("#content").position().top-1);
         });
 
-        //inote-list
+        var note = null;
 
+        //inote
+            var names = noteSingleton.getInstanceNames();
+            for(var i=0;i<names.length;i++)
+            {
+                $('#inote-new-create').append('<li role="presentation"><a id=c_n_'+ names[i] +' editor_name='+ names[i] +' role="menuitem" tabindex="-1" href="javascript:void(0);">'+ names[i] +'</a></li>');
+                var note_editor_item = $("#c_n_"+names[i]);
+
+                note_editor_item.click(function(){
+                    var editor_name = $(this).attr('editor_name');
+                    var cate_id = get_cur_cate_id();
+                    if(cate_id == null)
+                    {
+                        alert('please select category.');
+                        return;
+                    }
+                    note = new Note(null, cate_id, editor_name);
+                    note.init();
+                });
+            }
+
+        document.onkeydown = function(){
+            if (event.ctrlKey && event.keyCode==83)
+            {// Ctrl + S
+                console.log('Save: ');
+
+                note.create();
+
+                event.returnValue=false;
+            }
+        };
     </script>
 {%- endblock scripts %}

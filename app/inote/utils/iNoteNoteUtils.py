@@ -8,7 +8,7 @@ class iNoteNoteUtil:
 
 
     @staticmethod
-    def post():
+    def put():
         ''' post format
         request:
         {
@@ -40,7 +40,7 @@ class iNoteNoteUtil:
 
     @staticmethod
     def note2json(note):
-        json = {'note_id':note.id,'note_title':note.title,'note_content':note.content,'note_createtime':note.create_datetime,'note_modifytime':note.last_modify_datetime}
+        json = {'note_id':note.id,'note_title':note.title,'note_edit_type':note.edit_type,'note_content':note.content,'note_createtime':note.create_datetime,'note_modifytime':note.last_modify_datetime}
         tags = note.tags.all()
         tags_json = []
         for tag in tags:
@@ -60,7 +60,7 @@ class iNoteNoteUtil:
             return jsonify([{'status':'permission denied'}])
 
     @staticmethod
-    def put():
+    def post():
         json = request.get_json()
 
         if json['type'] == 'modify title':

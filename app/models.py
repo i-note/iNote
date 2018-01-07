@@ -143,10 +143,7 @@ class User(UserMixin,db.Model):
                            backref=db.backref('users',lazy='dynamic'),
                            lazy='dynamic')
 
-class Tag(db.Model):
-    __tablename__ = 'tags'
-    id = db.Column(db.Integer,primary_key=True)
-    name = db.Column(db.String(32),unique=True,index=True)
+
 
 class NoteCategory(db.Model):
     __tablename__ = 'note_categories'
@@ -158,14 +155,23 @@ class NoteCategory(db.Model):
     notes = db.relationship('Note',backref='category',lazy='dynamic')
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
+note_use_tags_relation = db.Table('note_use_tags_relation'
+                         ,db.Column('note_id',db.Integer,db.ForeignKey('notes.id'))
+                         ,db.Column('tags_id',db.Integer,db.ForeignKey('tags.id')))
+
+class Tag(db.Model):
+    __tablename__ = 'tags'
+    id = db.Column(db.Integer,primary_key=True)
+    name = db.Column(db.String(32),unique=True,index=True)
+
 class Note(db.Model):
     __tablename__ = 'notes'
     id = db.Column(db.Integer,primary_key = True)
     title = db.Column(db.String(128),index=True)
     edit_type = db.Column(db.Integer,nullable=False)
     content = db.Column(db.Text(),index=True)
-    create_date = db.Column(db.DateTime,default=datetime.utcnow())
-    last_modify_date = db.Column(db.DateTime,default=datetime.utcnow())
+    create_datetime = db.Column(db.DateTime,default=datetime.utcnow())
+    last_modify_datetime = db.Column(db.DateTime,default=datetime.utcnow())
     note_category_id= db.Column(db.Integer, db.ForeignKey('note_categories.id'), index=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 

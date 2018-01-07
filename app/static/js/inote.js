@@ -27,10 +27,17 @@
         setData : function(data){
             throw "inote editor exception: function need override.";
         },
+        getHTML : function(){
+            throw "inote editor exception: function need override.";
+        }
     };
 
     var NoteSingleton= function(){};
     NoteSingleton.prototype = {
+         getInstanceNames:function(){
+            NoteSingleton.names = NoteSingleton.names || new Array;
+            return NoteSingleton.names;
+         },
          getInstances:function(){
             NoteSingleton.instance = NoteSingleton.instance || {};
             return NoteSingleton.instance;
@@ -41,68 +48,107 @@
          },
          addInstance:function(instance){
             NoteSingleton.instance = NoteSingleton.instance || {};
+            NoteSingleton.names = NoteSingleton.names || new Array;
             if(instance instanceof EditorTypeInterface)
             {
                 if (instance.editor_name == undefined)
                     throw "inote editor exception: editor_name cannot undefined.";
+                NoteSingleton.names.push(instance.editor_name);
                 NoteSingleton.instance[instance.editor_name]=instance;
             }
          }
     };
 
-    var note = new NoteSingleton;
-
-    var Inote_CKEditor = function(name){
-        if(!name)
-            this.editor_name =  "ckeditor";
-        else
-            this.editor_name = name;
-        prototype = new EditorTypeInterface(this.editor_name);
-
-        this.construct=function(){
-            console.log("test");
-        }
-    };
-    note.addInstance(new Inote_CKEditor);
+    var noteSingleton = new NoteSingleton;
 
     /**
     * Note Class
     */
 
-     function Note(NoteCateId,EditorType,NoteId,NoteTitle,NoteContent){
-        var EditorTypes =   [
-                                {
-                                    "name"      : Null,
-                                    "loader"    : function(){},
-                                },
-                            ];
+     function Note(NoteId,CateId,EditorType){
+        var instance = null;
+        var note_id = NoteId;
+        var cate_id = CateId;
+        var editor_type = EditorType;
+        var title = "";
+        var content = "";
+        var create_datetime = "";
+        var last_modify_datetime = "";
 
-        var id = Null;
-        var note_category_id = Null;
-        var title = Null;
-        var content = Null;
-        var create_datetime = Null;
-        var last_modify_datetime = Null;
 
-        this.setEditType = function(EditorType)
-        {
-            if(edit_type == EditorTypes.Null)
-            {
-                throw "edit type is null";
-            }
+        var get_note = function(){
+            $.ajax({
+                type:'get',
+                url:"note",
+                data:{
+                    'note_id':note_id,
+                },
+                dataType: "json",
+                contentType: "application/json",
+                success:function(data){
+                    console.log('get note:',data)
+                }
+            });
         };
-        this.registEditorTypeInterface = function(interface)
-        {
-            if(interface instanceof EditorTypeInterface)
+        var init = function(){
+            if( note_id != undefined && note_id !=null)
             {
-                EditorTypes[interface.name] = callback;
+                get_note();
             }
-            else
-                throw "regist edit type error";
+
+            $("#note").remove();
+            var note = $('<div id="note"></div>');
+            note.append('<div id="note-title"><input name="noteTitle" id="noteTitle" value placeholder="无标题" tabindex="1" style="width:100%;"></div>');
+            note.append('<div id="note-tag"><input name="noteTag"></div>')
+            $("#content").append(note);
+
+            if( editor_type != undefined && editor_type !=null)
+            {
+                instance = noteSingleton.getInstance(editor_type);
+                note.append(instance.getHTML());
+                instance.construct();
+            }
+            note.append('<div id="note-status-bar"></div>');
+
         };
-        this.setEditType = function(EditorType)
-        {
-
-        }
-
+        var create = function(){
+            $.ajax({
+                type:'put',
+                url:"note",
+                data:JSON.stringify({
+                    'cate_id':cate_id,
+                    'note_title':getTitle(),
+                    'note_content':note_content,
+                    'note_editor':editor_type
+                }),
+                dataType: "json",
+                contentType: "application/json",
+                success:function(data){
+                    if(data.status == 'success'){
+                        console.log('rename: successful; ', data);
+                    }
+                }
+            });
+        };
+        var setTitle = function(title){
+            $("#note-title").val(title);
+        };
+        var getTitle = function(){
+            return $("#note-title").val();
+        };
+        var setContent = function(data){
+            instance.setData(data);
+        };
+        var getContent = function(){
+            return instance.getData();
+        };
+        return {
+            init : init,
+            create : create,
+            setTitle : setTitle,
+            getTitle : getTitle,
+            setContent : setContent,
+            getContent : getContent,
+        };
     };
+

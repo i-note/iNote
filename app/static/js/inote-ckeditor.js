@@ -38,21 +38,24 @@
         console.log(this.editor_name)
 
         this.construct=function(){
-
             ReLoadCkeditor();
         }
         this.destruct=function(){
             console.log("test");
         }
         this.getData=function(){
-            console.log("test");
+            return "test";
         }
         this.setData=function(data){
-
+            console.log('set: ',data);
+        }
+        this.getHTML=function(){
+            return '<div id="note-editor"><textarea id="ckeditor" tabindex="2"></textarea></div>';
         }
 
     };
 
-
     Inote_CKEditor.prototype = new EditorTypeInterface;
-    note.addInstance(new Inote_CKEditor);
+    noteSingleton.addInstance(new Inote_CKEditor);
+
+

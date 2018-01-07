@@ -258,7 +258,6 @@
 			activate: function(event, data) {
 				var list = new INote_list("#items",data.node.key);
 				console.log(list.id);
-
 				list.init();
 			},
 			tooltip: function(event, data) {
@@ -272,3 +271,11 @@
 			},
 		});
 	});
+
+function get_cur_cate_id(){
+    var node = $("#tree").fancytree("getActiveNode");
+    if(node)
+        return node.key;
+    else
+        return null;
+}
