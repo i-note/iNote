@@ -5,7 +5,7 @@ function INote_list(pos_id,CateId){
     var cate_id = CateId;
 
     var addItem = function(id,title,note_edit_type,content,img){
-        var newItem = $('<div id="note-item " class="note-items item" inote-id='+ cate_id +' inote_edit_type='+note_edit_type+'> </div>');
+        var newItem = $('<div id="note-item " class="note-items item" inote-id='+ id +' inote_edit_type='+note_edit_type+'> </div>');
         newItem.append('<span class="item-title">' + title + '</span>');
         newItem.append('<div class="item-body" ><span class="item-content-view">' + content + '</span></div>');
         if(img)

@@ -122,7 +122,7 @@
 
 {% block inote_content %}
 
-    <table class=" table-bordered" style="width:100%">
+    <table id="inote-table-frame" class=" table-bordered" style="width:100%">
         <thead>
             <tr height="50px">
                 <th width="20%">category</th>
@@ -200,6 +200,11 @@
     <script src={{url_for("static",filename="js/inote-ckeditor.js")}}></script>
 
     <script>
+
+        $("#inote-table-frame").ready(function(){
+            $("#inote-table-frame").colResizable();
+        });
+
         $("#category").height($(window).height()-$("#category").position().top-1);
         $("#items").height($(window).height()-$("#items").position().top-1);
         $("#content").height($(window).height()-$("#content").position().top-1);
@@ -232,15 +237,5 @@
                 });
             }
 
-        document.onkeydown = function(){
-            if (event.ctrlKey && event.keyCode==83)
-            {// Ctrl + S
-                console.log('Save: ');
-
-                note.create();
-
-                event.returnValue=false;
-            }
-        };
     </script>
 {%- endblock scripts %}

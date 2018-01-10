@@ -29,6 +29,9 @@
         },
         getHTML : function(){
             throw "inote editor exception: function need override.";
+        },
+        setKeyEvent : function(callback){
+            throw "inote editor exception: function need override.";
         }
     };
 
@@ -75,7 +78,6 @@
         var create_datetime = "";
         var last_modify_datetime = "";
 
-
         var get_note = function(){
             $.ajax({
                 type:'get',
@@ -86,40 +88,86 @@
                 dataType: "json",
                 contentType: "application/json",
                 success:function(data){
-                    console.log('get note:',data)
+//                    console.log('get note:',data)
+                    setTitle(data.note_title);
+                    setContent(data.note_content);
+                    setId(data.note_id);
+                    setTags(data.tags);
                 }
             });
         };
-        var init = function(){
-            if( note_id != undefined && note_id !=null)
-            {
-                get_note();
-            }
+        var isNew = function(){
+            return true;
+        };
+        var save = function(){
+                console.log('Save: ');
+            if(isNew)
+                put();
+            else
+                post();
+        };
+        var save_key = function(e){
+            if(e)
+                if (e.ctrlKey && e.keyCode==83)
+                {// Ctrl + S
 
+                    save();
+
+                    e.returnValue=false;
+                }
+
+        };
+        var init = function(){
             $("#note").remove();
-            var note = $('<div id="note"></div>');
+            var note = $('<div id="note" note-id="-1"></div>');
             note.append('<div id="note-title"><input name="noteTitle" id="noteTitle" value placeholder="无标题" tabindex="1" style="width:100%;"></div>');
-            note.append('<div id="note-tag"><input name="noteTag"></div>')
+            note.append('<div id="note-tag"><input name="noteTag" id="noteTag"></div>')
             $("#content").append(note);
 
             if( editor_type != undefined && editor_type !=null)
             {
                 instance = noteSingleton.getInstance(editor_type);
                 note.append(instance.getHTML());
+                instance.setKeyEvent(save);
                 instance.construct();
             }
             note.append('<div id="note-status-bar"></div>');
+            // bind quick key
+            document.onkeydown = save_key;
 
+            if( note_id != undefined && note_id !=null)
+            {
+                get_note();
+            }
         };
-        var create = function(){
+        var put = function(){
             $.ajax({
                 type:'put',
                 url:"note",
                 data:JSON.stringify({
                     'cate_id':cate_id,
                     'note_title':getTitle(),
-                    'note_content':note_content,
-                    'note_editor':editor_type
+                    'note_content':getContent(),
+                    'note_editor':editor_type,
+                    'note_use_tags':getTags(),
+                }),
+                dataType: "json",
+                contentType: "application/json",
+                success:function(data){
+                    setId(data.note_id);
+                }
+            });
+        };
+        var post = function(){
+            $.ajax({
+                type:'post',
+                url:"note",
+                data:JSON.stringify({
+                    'cate_id':getId(),
+                    'note_title':getTitle(),
+                    'note_content':getContent(),
+                    'note_editor':editor_type,
+                    'note_use_tags':getTags(),
                 }),
                 dataType: "json",
                 contentType: "application/json",
@@ -131,10 +179,11 @@
             });
         };
         var setTitle = function(title){
-            $("#note-title").val(title);
+            console.log('title',title);
+            $("#noteTitle").val(title);
         };
         var getTitle = function(){
-            return $("#note-title").val();
+            return $("#noteTitle").val();
         };
         var setContent = function(data){
             instance.setData(data);
@@ -142,9 +191,28 @@
         var getContent = function(){
             return instance.getData();
         };
+        var setId = function(id){
+            $('#note').attr('note-id',id);
+        };
+        var getId = function(){
+            return $('#note').attr('note-id');
+        };
+        var setTags = function(tags){
+            var title = '';
+            for(var i = 0; i< tags.length;i++){
+                title+=tags[i].tag_name + ';';
+            }
+            $("#noteTag").val(title);
+        };
+        var getTags = function(tags){
+            var title = $("#noteTag").val();
+            var tags = title.split(';');
+            return tags;
+        };
         return {
             init : init,
-            create : create,
+            put : put,
+            post : post,
             setTitle : setTitle,
             getTitle : getTitle,
             setContent : setContent,

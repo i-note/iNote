@@ -174,6 +174,10 @@ class Note(db.Model):
     last_modify_datetime = db.Column(db.DateTime,default=datetime.utcnow())
     note_category_id= db.Column(db.Integer, db.ForeignKey('note_categories.id'), index=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    tags = db.relationship('Tag',
+                           secondary=note_use_tags_relation,
+                           backref=db.backref('notes', lazy='dynamic'),
+                           lazy='dynamic')
 
 class Article(db.Model):
     __tablename__ = 'articles'
