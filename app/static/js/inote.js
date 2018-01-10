@@ -158,24 +158,14 @@
                 }
             });
         };
-        var post = function(){
+        var post = function(obj){
             $.ajax({
-                type:'post',
+                type:obj.type,
                 url:"note",
-                data:JSON.stringify({
-                    'cate_id':getId(),
-                    'note_title':getTitle(),
-                    'note_content':getContent(),
-                    'note_editor':editor_type,
-                    'note_use_tags':getTags(),
-                }),
+                data:obj.data,
                 dataType: "json",
                 contentType: "application/json",
-                success:function(data){
-                    if(data.status == 'success'){
-                        console.log('rename: successful; ', data);
-                    }
-                }
+                success:obj.success,
             });
         };
         var setTitle = function(title){
@@ -209,14 +199,19 @@
             var tags = title.split(';');
             return tags;
         };
+        var destruct = function(){
+            $('#note').remove();
+        };
         return {
             init : init,
             put : put,
             post : post,
             setTitle : setTitle,
             getTitle : getTitle,
+            getId : getId,
             setContent : setContent,
             getContent : getContent,
+            destruct : destruct,
         };
     };
 

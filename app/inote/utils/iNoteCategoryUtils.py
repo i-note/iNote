@@ -68,9 +68,21 @@ class iNoteCategoryUtil:
         db.session.add(child)
         db.session.commit()
         return jsonify({'id':child.id})
+
     @staticmethod
     def delete():
-        pass
+        json = request.get_json()
+        cate = NoteCategory.query.filter_by(id=int(json['cate_id'])).first()
+        if cate is not None:
+            if cate.user_id != current_user.id:
+                return jsonify({'status': 'permission denied'})
+            elif cate.name == 'crash' or cate.name == 'root':
+                return jsonify({'status': 'cannot changed'})
+            db.session.delete(cate)
+            db.session.commit()
+            return jsonify({'status':'success'})
+        return jsonify({'status': 'resource not found'})
+
     @staticmethod
     def get():
         id = int(request.args.get('id'))

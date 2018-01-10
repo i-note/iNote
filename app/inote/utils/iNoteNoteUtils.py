@@ -26,17 +26,38 @@ class iNoteNoteUtil:
         json = request.get_json()
         cate = NoteCategory.query.filter_by(id=int(json['cate_id'])).first()
 
-        note = Note(name=json['new_cate_title'],content=json['note_content'],title=json['note_title'],edit_type=json["note_editor"],last_modify_datetime=datetime.utcnow())
+        note = Note(title=json['note_title'],content=json['note_content'],edit_type=json["note_editor"],last_modify_datetime=datetime.utcnow())
         note.category = cate
         note.user = current_user
-
         db.session.add(note)
+
+        json_tags = json['note_use_tags']
+        for t_name in json_tags:
+            if t_name == '':
+                continue
+            tag = Tag.query.filter_by(name=t_name).first()
+            if tag is not None:
+                note.tags.append(tag)
+            else:
+                tag = Tag(name=t_name)
+                db.session.add(tag)
+                current_user.tags.append(tag)
+                note.tags.append(tag)
+
         db.session.commit()
         return jsonify({'note_id':note.id})
 
     @staticmethod
     def delete():
-        pass
+        json = request.get_json()
+        note = Note.query.filter_by(id=int(json['note_id'])).first()
+        if note is not None:
+            if note.user_id != current_user.id:
+                return jsonify({'status': 'permission denied'})
+            db.session.delete(note)
+            db.session.commit()
+            return jsonify({'status':'success'})
+        return jsonify({'status':'resource not found'})
 
     @staticmethod
     def note2json(note):

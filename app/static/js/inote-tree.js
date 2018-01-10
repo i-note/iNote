@@ -62,7 +62,21 @@
 					}else if (action == 'delete') {
 						// delete
                         var node = $("#tree").fancytree("getActiveNode");
-						node.remove();
+
+                            $.post({
+                                type:'delete',
+                                url:"category",
+                                data:JSON.stringify({
+                                    'cate_id':node.key,
+                                }),
+                                dataType: "json",
+                                contentType: "application/json",
+                                success:function(data){
+                                    if(data.status == 'success')
+                                        node.remove();
+                                }
+                            });
+
 					}else if (action == 'rename') {
 						// rename
                         $('#'+$("#tree").fancytree("getActiveNode").li.id).dblclick();
@@ -88,7 +102,20 @@
 						break;
 					case 46: // [delete]
 						var node = $("#tree").fancytree("getActiveNode");
-						node.remove();
+
+						    $.post({
+                                type:'delete',
+                                url:"category",
+                                data:JSON.stringify({
+                                    'cate_id':node.key,
+                                }),
+                                dataType: "json",
+                                contentType: "application/json",
+                                success:function(data){
+                                    if(data.status == 'success')
+                                        node.remove();
+                                }
+                            });
 						break;
 					case 116: // [F5]
 

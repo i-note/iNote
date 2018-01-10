@@ -14,9 +14,49 @@ function INote_list(pos_id,CateId){
         newItem.click(function(){
             $(this).addClass("item-active");
             $(this).siblings().removeClass("item-active");
-            console.log($(this).attr('inote-id'));
-            console.log($(this).attr('inote_edit_type'));
+
             resetEditor($(this).attr('inote-id'),$(this).attr('inote_edit_type'));
+        });
+
+            $.contextMenu({
+                selector: '.note-items',
+                callback: function(key, options) {
+                    var item = $(options.$trigger.context);
+                    if(key == 'edit'){
+                        resetEditor(item.attr('inote-id'),item.attr('inote_edit_type'));
+                    }else if(key == 'delete')
+                    {
+                        remove(item);
+                    }
+                },
+                items: {
+                    "edit": {name: "Edit", icon: "edit"},
+                    "cut": {name: "Cut", icon: "cut"},
+                    "copy": {name: "Copy", icon: "copy"},
+                    "paste": {name: "Paste", icon: "paste"},
+                    "delete": {name: "Delete", icon: "delete"},
+                    "sep1": "---------",
+                    "quit": {name: "Quit", icon: "quit"}
+                }
+            });
+
+    };
+    var remove = function(item){
+        var note_id = item.attr('inote-id');
+        new Note().post({
+            'type':'delete',
+            data:JSON.stringify({
+                'note_id':note_id
+            }),
+            success:function(data){
+                if(data.status == 'success'){
+                    item.remove();
+                    if(note_id == note.getId())
+                        note.destruct();
+                }else if(data.status == 'resource not found'){
+
+                }
+            }
         });
     };
 
