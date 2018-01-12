@@ -73,8 +73,9 @@
         var note_id = NoteId;
         var cate_id = CateId;
         var editor_type = EditorType;
-        var title = "";
-        var content = "";
+        var note_title = "";
+        var note_content = "";
+        var note_tags = new Array;
         var create_datetime = "";
         var last_modify_datetime = "";
 
@@ -97,14 +98,17 @@
             });
         };
         var isNew = function(){
-            return true;
+            if (getId() == '-1')
+                return true;
+            else
+                return false;
         };
         var save = function(){
                 console.log('Save: ');
-            if(isNew)
+            if(isNew())
                 put();
             else
-                post();
+                update();
         };
         var save_key = function(e){
             if(e)
@@ -155,6 +159,8 @@
                 contentType: "application/json",
                 success:function(data){
                     setId(data.note_id);
+                    var list = new INote_list("#items", cate_id);
+				    list.init();
                 }
             });
         };
@@ -168,26 +174,76 @@
                 success:obj.success,
             });
         };
+        var title_update = function(){
+            if(note_title != getTitle())
+            post({
+                type:'post',
+                data:JSON.stringify({
+                    'type':'modify title',
+                    'note_id':getId(),
+                    'new_note_title':getTitle(),
+                }),
+                success:function(data){
+                    note_title = getTitle();
+                }
+            });
+        };
+        var content_update = function(){
+            if(note_content != getContent())
+            post({
+                type:'post',
+                data:JSON.stringify({
+                    'type':'modify content',
+                    'note_id':getId(),
+                    'new_note_content':getContent(),
+                }),
+                success:function(data){
+                    note_content = getContent();
+                }
+            });
+        };
+        var tags_update = function(){
+            if(note_tags.toString() != getTags().toString())
+            post({
+                type:'post',
+                data:JSON.stringify({
+                    'type':'modify tags',
+                    'note_id':getId(),
+                    'new_note_tags':getTags(),
+                }),
+                success:function(data){
+                    note_tags = getTags();
+                }
+            });
+        };
+        var update = function(){
+            title_update();
+            content_update();
+            tags_update();
+        };
         var setTitle = function(title){
-            console.log('title',title);
+            note_title = title;
             $("#noteTitle").val(title);
         };
         var getTitle = function(){
             return $("#noteTitle").val();
         };
         var setContent = function(data){
+            note_content = data;
             instance.setData(data);
         };
         var getContent = function(){
             return instance.getData();
         };
         var setId = function(id){
+            note_id = id;
             $('#note').attr('note-id',id);
         };
         var getId = function(){
             return $('#note').attr('note-id');
         };
         var setTags = function(tags){
+            note_tags = tags;
             var title = '';
             for(var i = 0; i< tags.length;i++){
                 title+=tags[i].tag_name + ';';
@@ -196,6 +252,8 @@
         };
         var getTags = function(tags){
             var title = $("#noteTag").val();
+            if (title.substring(title.length-1) == ';')
+                title = title.substring(0,title.length-1)
             var tags = title.split(';');
             return tags;
         };
@@ -212,6 +270,7 @@
             setContent : setContent,
             getContent : getContent,
             destruct : destruct,
+            update : update,
         };
     };
 

@@ -108,15 +108,14 @@ class iNoteNoteUtil:
 
         if json['type'] == 'modify tags':
             note = Note.query.filter_by(id=int(json['note_id'])).first()
-            json_tags = json['tags']
+            json_tags = json['new_note_tags']
 
             if note is None:
                 return jsonify({'status': 'resource not found'})
             if note.user_id != current_user.id:
                 return jsonify({'status':'permission denied'})
             else:
-                for json_tag in json_tags:
-                    t_name = json_tag.tag_name
+                for t_name in json_tags:
                     tag = Tag.query.filter_by(name=t_name).first()
                     if tag is not None:
                         note.tags.append(tag)
