@@ -31,14 +31,15 @@ class BaseConfig:
 class DevelopmentConfig(BaseConfig):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
-        'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite3.db')
+                              'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite3.db')
+
 
 class LisukeDevConfig(BaseConfig):
     host = "0.0.0.0"
     port = 80
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
-        'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite3.db')
+                              'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite3.db')
     MAIL_SERVER = 'smtp.qq.com'
     MAIL_PORT = 25
     MAIL_USE_TLS = True
@@ -50,9 +51,8 @@ class LisukeDevConfig(BaseConfig):
     SERVER_NAME = 'lisuke.cf'
 
 
-
 config = {
     'development': DevelopmentConfig,
-    'lisuke-dev':LisukeDevConfig,
+    'lisuke-dev': LisukeDevConfig,
     'default': DevelopmentConfig
 }

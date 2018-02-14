@@ -1,14 +1,14 @@
 from flask_login import current_user
-from flask import jsonify,request,abort
-from app.models import User,NoteCategory,db
+from flask import jsonify, request, abort
+from app.models import User, NoteCategory, db
 from flask_babel import gettext as _
 
-class iNoteCategoryUtil:
 
+class iNoteCategoryUtil:
     @staticmethod
     def getCategoriesFromRoot(cate):
         # {"title": "Folder 2", "key": 2, "children": [
-        ret = {"title":cate.name,"key":cate.id }
+        ret = {"title": cate.name, "key": cate.id}
         if cate.name == 'crash' or cate.name == 'root':
             ret['title'] = _(cate.name)
         children = cate.children.all()
@@ -17,7 +17,7 @@ class iNoteCategoryUtil:
             for item in children:
                 list = iNoteCategoryUtil.getCategoriesFromRoot(item)
                 children_list.append(list)
-            ret['children']=children_list
+            ret['children'] = children_list
         return ret
 
     @staticmethod
@@ -26,7 +26,7 @@ class iNoteCategoryUtil:
         children = cate.children.all()
         if len(children) > 0:
             for item in children:
-                node = {'title':item.name,'key':item.id}
+                node = {'title': item.name, 'key': item.id}
                 list = iNoteCategoryUtil.getCategoryFromParent(item)
                 if list != []:
                     node['children'] = list
@@ -67,7 +67,7 @@ class iNoteCategoryUtil:
         child.user = current_user
         db.session.add(child)
         db.session.commit()
-        return jsonify({'id':child.id})
+        return jsonify({'id': child.id})
 
     @staticmethod
     def delete():
@@ -80,14 +80,14 @@ class iNoteCategoryUtil:
                 return jsonify({'status': 'cannot changed'})
             db.session.delete(cate)
             db.session.commit()
-            return jsonify({'status':'success'})
+            return jsonify({'status': 'success'})
         return jsonify({'status': 'resource not found'})
 
     @staticmethod
     def get():
         id = int(request.args.get('id'))
         if int(id) == -1:
-            categories = NoteCategory.query.filter_by(user_id=current_user.id,parent_id=None).all()
+            categories = NoteCategory.query.filter_by(user_id=current_user.id, parent_id=None).all()
             root = []
             for x in categories:
                 root.append(iNoteCategoryUtil.getCategoriesFromRoot(x))
@@ -97,7 +97,7 @@ class iNoteCategoryUtil:
             if current_user.id == cate.user.id:
                 return jsonify(iNoteCategoryUtil.getCategoryFromParent(cate))
             else:
-                return jsonify([{'status':'permission denied'}])
+                return jsonify([{'status': 'permission denied'}])
 
     @staticmethod
     def put():
@@ -107,13 +107,13 @@ class iNoteCategoryUtil:
             if cate is None:
                 return jsonify({'status': 'resource not found'})
             if cate.user_id != current_user.id:
-                return jsonify({'status':'permission denied'})
+                return jsonify({'status': 'permission denied'})
             elif cate.name == 'crash' or cate.name == 'root':
                 return jsonify({'status': 'cannot changed'})
             else:
                 cate.name = json['new_cate_title']
                 db.session.commit()
-                return jsonify({'status':'success'})
+                return jsonify({'status': 'success'})
 
         if json['type'] == 'move to':
             current_cate_id = int(json['current_cate_id']);
@@ -122,33 +122,31 @@ class iNoteCategoryUtil:
             dest_parent_cate = NoteCategory.query.filter_by(id=dest_parent_cate_id).first()
 
             if current_cate is None or (dest_parent_cate is None and dest_parent_cate_id != -1):
-                #未找到节点
+                # 未找到节点
                 return jsonify({'status': 'resource not found'})
-            if current_cate.user_id != current_user.id or ( dest_parent_cate_id != -1 and dest_parent_cate.user_id != current_user.id):
-                #跨用户操作
-                return jsonify({'status':'permission denied'})
-            if current_cate.name == 'crash' or  (dest_parent_cate_id != -1 and current_cate.name == 'root'):
-                #回收站和默认根不能动
+            if current_cate.user_id != current_user.id or (
+                            dest_parent_cate_id != -1 and dest_parent_cate.user_id != current_user.id):
+                # 跨用户操作
+                return jsonify({'status': 'permission denied'})
+            if current_cate.name == 'crash' or (dest_parent_cate_id != -1 and current_cate.name == 'root'):
+                # 回收站和默认根不能动
                 return jsonify({'status': 'cannot changed'})
-            if  dest_parent_cate_id != -1 and iNoteCategoryUtil.findCateHasOnProtoChains(dest_parent_cate,current_cate):
-                #根节点移动到自身
+            if dest_parent_cate_id != -1 and iNoteCategoryUtil.findCateHasOnProtoChains(dest_parent_cate, current_cate):
+                # 根节点移动到自身
                 return jsonify({'status': 'cannot changed'})
-            if  dest_parent_cate_id != -1 and current_cate == dest_parent_cate:
-                #已就位
+            if dest_parent_cate_id != -1 and current_cate == dest_parent_cate:
+                # 已就位
                 return jsonify({'status': 'already on this pos'})
             if dest_parent_cate_id == -1:
                 dest_parent_cate = None
             current_cate.parent = dest_parent_cate
             db.session.commit()
-            return jsonify({'status':'success'})
-
-
-
+            return jsonify({'status': 'success'})
 
     @staticmethod
-    def findCateHasOnProtoChains(cate,protoChains):
+    def findCateHasOnProtoChains(cate, protoChains):
         if cate is None or protoChains is None:
             return False
         if cate == protoChains:
             return True
-        return iNoteCategoryUtil.findCateHasOnProtoChains(cate.parent,protoChains)
+        return iNoteCategoryUtil.findCateHasOnProtoChains(cate.parent, protoChains)
