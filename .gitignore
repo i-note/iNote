@@ -101,8 +101,10 @@ ENV/
 # mypy
 .mypy_cache/
 
+# idea
 .idea
+iNote.iml
 
-#iNote
+# iNote
 config.py
 data-dev.sqlite3.db
