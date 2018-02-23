@@ -1,0 +1,18 @@
+{% include 'header.html' %}
+
+<div id="postsContainer">
+	<div class="container">
+		<h2>Search - {{.keywords}} </h2>
+	</div>
+
+	<div id="posts">
+		{% include 'post_abstract.html' %}
+	    <!-- paging -->
+		{% include 'paging.html' %}
+	</div>
+</div>
+
+{% include 'footer.html' %}
+{% include 'highlight.html' %}
+</body>
+</html>

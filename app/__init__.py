@@ -10,7 +10,6 @@ from flaskext.markdown import Markdown
 from flask_moment import Moment
 from config import config
 
-
 bootstrap = Bootstrap()
 db = SQLAlchemy()
 pagedown = PageDown()
@@ -21,8 +20,7 @@ moment = Moment()
 
 login_manager = LoginManager()
 # login_manager.session_protection = 'strong'
-# login_manager.login_view = 'auth.login'
-
+login_manager.login_view = 'auth.login'
 
 
 def create_app(config_name):
@@ -42,14 +40,18 @@ def create_app(config_name):
 
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
+
     #
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
+
     #
     from .inote import inote as inote_blueprint
     app.register_blueprint(inote_blueprint, url_prefix='/inote')
+
     #
-    # from .api_1_0 import api as api_1_0_blueprint
-    # app.register_blueprint(api_1_0_blueprint, url_prefix='/api/v1.0')
+    from .blog import blog as blog_blueprint
+    app.register_blueprint(blog_blueprint, subdomain='blog')
+    app.register_blueprint(blog_blueprint, url_prefix='/blog')
 
     return app

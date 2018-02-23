@@ -1,0 +1,26 @@
+{% include 'header.html' %}
+
+<div id="postsContainer">
+	<div class="container">
+	    <h2>Tags</h2>
+	</div>
+	<div id="posts">
+		
+		<div class="each-post">
+		    <ul>
+		        {{range $.tags}}
+		        <li>
+	                <a href="{{$.tagPostsUrl}}/{{.Tag}}">
+	                    {{.Tag}} {{.Count}}
+	                </a> 
+    		    </li>
+    		    {{end}}
+		    </ul>
+		</div>
+	</div>
+</div>
+
+{% include 'footer.html' %}
+
+</body>
+</html>

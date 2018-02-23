@@ -11,11 +11,15 @@ def permission_required(permission):
             if not current_user.can(permission):
                 abort(403)
             return func(*args, **kwargs)
+
         return decorated_function
+
     return decorator
+
 
 def admin_required(func):
     return permission_required(Permission.ADMINISTER)(func)
+
 
 def user_required(func):
     return permission_required(Permission.ADMINISTER)(func)

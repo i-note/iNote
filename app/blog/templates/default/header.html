@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="keywords" content="lisuke.cf">
+<meta name="description" content="inote">
+<meta name="author" content="inote">
+
+<title>
+{% if inote_blog_ctx.curIsIndex %}
+    {{ inote_blog_ctx.blogInfo.Title }}
+{% elif inote_blog_ctx.curIsCate %}
+    Category-{{inote_blog_ctx.curCateTitle}}
+{% elif inote_blog_ctx.curIsSearch %}
+    Search-{{inote_blog_ctx.keywords}}
+{% elif inote_blog_ctx.curIsTags %}
+    Tags
+{% elif inote_blog_ctx.curIsTagPosts %}
+    Tag-{{inote_blog_ctx.curTag}}
+{% elif inote_blog_ctx.curIsPost %}
+	{{ inote_blog_ctx.post.Title }}
+{% elif inote_blog_ctx.curIsSingle %}
+	{{ inote_blog_ctx.single.Title }}
+{% elif inote_blog_ctx.curIsArchive %}
+	Archives
+{% endif %}
+
+</title>
+<!-- Bootstrap core CSS -->
+<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+<!-- 字体必须同一域 -->
+
+<script>
+function log(o) {
+
+}
+</script>
+<style>
+
+</style>
+</head>
+<body>
+
+<div id="headerAndNav" >
+	<div id="headerContainer" class="container">
+		<!-- 头部可放博客名, 导航 -->
+		<div id="header">
+
+			{% set username = inote_blog_ctx.userInfo.Username %}
+			<h1>
+				<a href="{{inote_blog_ctx.indexUrl}}" id="logo">
+				{% if inote_blog_ctx.blogInfo.Logo %}
+				<img src="{{inote_blog_ctx.blogInfo.Logo}}" title="{{inote_blog_ctx.blogInfo.Title}}"/>
+				{% else %}
+					{{ inote_blog_ctx.blogInfo.Title }}
+				{% endif %}
+				</a>
+			</h1>
+			<div id="blogDesc">
+				{% inote_blog_ctx.blogInfo.SubTitle %}
+			</div>
+		</div>
+	</div>
+
+	<!-- Static navbar -->
+	<div class="navbar navbar-default">
+	  <div class="container">
+	    <div class="navbar-header">
+	      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	        <span class="sr-only">Toggle navigation</span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+	      <a class="navbar-brand" href="{{inote_blog_ctx.indexUrl}}">
+	      	{% if inote_blog_ctx.blogInfo.Logo %}
+
+			<img src="{{inote_blog_ctx.blogInfo.Logo}}" title="{{inote_blog_ctx.blogInfo.Title}}"/>
+			{% else %}
+				{{ inote_blog_ctx.blogInfo.Title }}
+			{% endif %}
+	      </a>
+	    </div>
+	    <div class="navbar-collapse collapse">
+	      <ul class="nav navbar-nav">
+
+	    	<li class="{% if inote_blog_ctx.curIsIndex %}active{% endfor %}"><a href="{{inote_blog_ctx.indexUrl}}">Home</a></li>
+		    <!-- 分类页 -->
+		   	{% for cate in inote_blog_ctx.cates %}
+				<li class="{% if cate.id == inote_blog_ctx.curCateId %}active{% endif %}">
+					<a href="{{inote_blog_ctx.cateUrl}}/{{cate.id}}"
+					>{{cate.title}}</a>
+				</li>
+			{% endfor %}
+			<!-- 单页 -->
+			{% for page in inote_blog_ctx.singles %}
+			    <li class="{% if inote_blog_ctx.curSingleId == inote_blog_ctx.SingleId %}active{% endif %}">
+					<a href="{{inote_blog_ctx.singleUrl}}/{{page.UrlTitle}}">{{page.title}}</a>
+				</li>
+			{% endfor %}
+
+			<!-- 归档 -->
+			<li class="{% if inote_blog_ctx.curIsArchive %}active{% endfor %}">
+				<a href="{{inote_blog_ctx.archiveUrl}}">Archives</a>
+			</li>
+			<li class="{% if inote_blog_ctx.curIsTags %}active{% endfor %}">
+				<a href="{{inote_blog_ctx.tagsUrl}}">Tags</a>
+			</li>
+
+	      </ul>
+	      <form class="navbar-form navbar-right" id="search" onsubmit="search(event);return false;">
+	      	<div class="input-group">
+			  	<span class="input-group-addon" id="searchIcon" onclick="search(event);"><i class="fa fa-search"></i></span>
+		        <input type="text" placeholder="search" id="searchInput" class="form-control" value="{{inote_blog_ctx.keywords}}">
+		  	</div>
+	      </form>
+	    </div><!--/.nav-collapse -->
+	  </div>
+	</div>
+</div>

@@ -62,7 +62,21 @@
 					}else if (action == 'delete') {
 						// delete
                         var node = $("#tree").fancytree("getActiveNode");
-						node.remove();
+
+                            $.post({
+                                type:'delete',
+                                url:"category",
+                                data:JSON.stringify({
+                                    'cate_id':node.key,
+                                }),
+                                dataType: "json",
+                                contentType: "application/json",
+                                success:function(data){
+                                    if(data.status == 'success')
+                                        node.remove();
+                                }
+                            });
+
 					}else if (action == 'rename') {
 						// rename
                         $('#'+$("#tree").fancytree("getActiveNode").li.id).dblclick();
@@ -88,7 +102,20 @@
 						break;
 					case 46: // [delete]
 						var node = $("#tree").fancytree("getActiveNode");
-						node.remove();
+
+						    $.post({
+                                type:'delete',
+                                url:"category",
+                                data:JSON.stringify({
+                                    'cate_id':node.key,
+                                }),
+                                dataType: "json",
+                                contentType: "application/json",
+                                success:function(data){
+                                    if(data.status == 'success')
+                                        node.remove();
+                                }
+                            });
 						break;
 					case 116: // [F5]
 
@@ -258,7 +285,6 @@
 			activate: function(event, data) {
 				var list = new INote_list("#items",data.node.key);
 				console.log(list.id);
-
 				list.init();
 			},
 			tooltip: function(event, data) {
@@ -272,3 +298,11 @@
 			},
 		});
 	});
+
+function get_cur_cate_id(){
+    var node = $("#tree").fancytree("getActiveNode");
+    if(node)
+        return node.key;
+    else
+        return null;
+}

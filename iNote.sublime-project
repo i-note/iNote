@@ -1,0 +1,19 @@
+{
+    "build_systems":
+    [
+        {
+            "cmd":
+            [
+                "python",
+                "manager.py",
+                "runserver"
+            ],
+            "env":
+            {
+                "PYTHONPATH": ".venv\\Lib\\site-packages"
+            },
+            "name": "Run iNote",
+            "selector": "source.python"
+        }
+    ]
+}
